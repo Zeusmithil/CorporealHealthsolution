@@ -1,0 +1,111 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+def append_row():
+
+    df = pd.read_csv('data.csv')
+
+
+    emp_id = int(input("Enter employee ID: "))
+    emp_name = input("Enter employee name: ")
+    salary = float(input("Enter salary: "))
+    age = int(input("Enter age: "))
+    gender = input("Enter gender: ")
+
+
+    new_row = {'emp_id': emp_id, 'Empname': emp_name, 'salary': salary, 'age': age, 'gender': gender}
+    new_df = pd.DataFrame([new_row])
+
+
+    new_df.to_csv('data.csv', mode='a', header=False, index=False)
+    print("New row appended successfully!")
+
+def delete_row():
+
+    df = pd.read_csv("data.csv")
+
+
+    row_to_delete = int(input("Enter the row number to delete: "))
+    if row_to_delete < 0 or row_to_delete >= len(df):
+        print("Invalid row number.")
+        return
+
+
+    df = df.drop(index=row_to_delete).reset_index(drop=True)
+    df.to_csv("data.csv", index=False)
+    print(f"Row {row_to_delete} deleted successfully!")
+
+def update_row():
+
+    df = pd.read_csv("data.csv")
+
+
+    update_row = int(input("Enter the row number to update: "))
+    if update_row < 0 or update_row >= len(df):
+        print("Invalid row number.")
+        return
+
+
+    emp_id = int(input("Enter new employee ID: "))
+    emp_name = input("Enter new employee name: ")
+    salary = float(input("Enter new salary: "))
+    age = int(input("Enter new age: "))
+    gender = input("Enter new gender: ")
+
+
+    df.at[update_row, 'emp_id'] = emp_id
+    df.at[update_row, 'Empname'] = emp_name
+    df.at[update_row, 'salary'] = salary
+    df.at[update_row, 'age'] = age
+    df.at[update_row, 'gender'] = gender
+
+    # Save the updated data to the CSV file
+    df.to_csv("data.csv", index=False)
+    print(f"Row {update_row} updated successfully!")
+
+def visualization():
+
+    data = pd.read_csv('data.csv')
+
+
+    if 'salary' not in data.columns:
+        print("The CSV file does not contain a 'salary' column.")
+        return
+
+
+    salaries = data['salary']
+
+
+    plt.figure(figsize=(8, 6))
+    plt.hist(salaries, bins=20, alpha=0.75, color='red', edgecolor='black')
+
+
+    plt.title('Salary Distribution')
+    plt.xlabel('Salary')
+    plt.ylabel('Frequency')
+    plt.show()
+
+def main():
+
+    print("Choose an option:")
+    print("1. Append a new row")
+    print("2. Delete a row")
+    print("3. Update a row")
+    print("4. Visualize the data")
+
+
+    choice = input("Enter your choice (1, 2, 3, or 4): ")
+
+
+    if choice == '1':
+        append_row()
+    elif choice == '2':
+        delete_row()
+    elif choice == '3':
+        update_row()
+    elif choice == '4':
+        visualization()
+    else:
+        print("Invalid choice. Please try again.")
+
