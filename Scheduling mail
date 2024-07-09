@@ -1,0 +1,78 @@
+import smtplib
+import time
+import schedule
+from email.mime.text import MIMEText
+from datetime import datetime
+
+def send_email():
+    senders_mail = 'nmit22098.cs@rmkec.ac.in'
+    receivers_mail = 'mithilnaresh2004@gmail.com'
+    password = 'Mastermithil10'
+
+    subject = 'Daily alert message'
+    message = 'Hi this is an important daily alert message!'
+
+    text = f"Subject: {subject}\n\n{message}"
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(senders_mail, password)
+    server.sendmail(senders_mail, receivers_mail, text)
+    print(f'Email sent to {receivers_mail}')
+    server.quit()
+
+def send_weekly_email():
+    senders_mail = 'nmit22098.cs@rmkec.ac.in'
+    receivers_mail = 'mithilnaresh2004@gmail.com'
+    password = 'Mastermithil10'
+
+    subject = 'Weekly alert message'
+    message = 'Hi this is an important weekly alert message!'
+
+    text = f"Subject: {subject}\n\n{message}"
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(senders_mail, password)
+    server.sendmail(senders_mail, receivers_mail, text)
+    print(f'Weekly Email sent to {receivers_mail}')
+    server.quit()
+
+def send_monthly_email():
+    senders_mail = 'nmit22098.cs@rmkec.ac.in'
+    receivers_mail = 'mithilnaresh2004@gmail.com'
+    password = 'Mastermithil10'
+
+    try:
+        # Get the current date and time
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.now().strftime("%H:%M")
+
+        # Check if it's the 1st of the month at 15:30
+        if current_date.endswith("-01") and current_time == "15:38":
+            # Create the email message
+            msg = MIMEText(f"Hi There, it's 15:30 ({current_date})")
+            msg['Subject'] = "Monthly Alert Mail"
+            msg['From'] = senders_mail
+            msg['To'] = receivers_mail
+
+            # Send the email
+            with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+                smtp.starttls()
+                smtp.login(senders_mail, password)
+                smtp.send_message(msg)
+
+            print("Monthly alert email sent successfully!")
+        else:
+            print("It's not the 1st of the month at 15:30. Monthly alert email not sent.")
+
+    except Exception as e:
+        print(f"Error sending monthly alert email: {e}")
+
+schedule.every().day.at("15:38").do(send_email)
+schedule.every().monday.at("15:38").do(send_weekly_email)
+schedule.every().day.at("15:38").do(send_monthly_email)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
